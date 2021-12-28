@@ -7,7 +7,7 @@ function Ping(Address:RawByteString):Boolean;
 implementation
 
 uses
-  Windows, Winsock, SysUtils;
+  Windows, Winsock, SysUtils, System.AnsiStrings;
 
 const
   IP_STATUS_BASE=11000;
@@ -136,7 +136,7 @@ begin
   WSAStartup ($0101, wsdata);
   try
     gethostname (@hostName[0], sizeof (hostName));
-    StrPCopy(hostName, name);
+    System.AnsiStrings.StrPCopy(hostName, name);
     hostEnt := gethostbyname (hostName);
     if Assigned (hostEnt) then
       if Assigned (hostEnt^.h_addr_list) then begin
