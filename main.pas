@@ -13,7 +13,6 @@ const NETFILE = 'network.conf';
 
 type
   TForm1 = class(TForm)
-    lbl_current_ip: TLabel;
     ip_current: TMaskEdit;
     lbl_new_ip: TLabel;
     ip_new: TMaskEdit;
@@ -24,8 +23,15 @@ type
     logs: TMemo;
     btn_change: TButton;
     lbl_author: TLabel;
+    cbox_interface: TComboBox;
+    lbl_ipcurrent: TLabel;
     procedure FormShow(Sender: TObject);
     procedure btn_changeClick(Sender: TObject);
+    procedure cbox_interfaceChange(Sender: TObject);
+    procedure ip_currentChange(Sender: TObject);
+    procedure ip_newChange(Sender: TObject);
+    procedure netmaskChange(Sender: TObject);
+    procedure gwaddrChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -101,6 +107,24 @@ begin
 end;
 
 // проверка библиотеки windows и настроек сетевой карты
+procedure TForm1.cbox_interfaceChange(Sender: TObject);
+begin
+  if form1.cbox_interface.ItemIndex = 0 then
+    begin
+      form1.ip_current.Text:= '___.___.___.___';
+      form1.ip_current.Enabled:= False;
+      form1.ip_new.Enabled:= False;
+      form1.netmask.Enabled:= False;
+      form1.gwaddr.Enabled:= False;
+      form1.btn_change.Enabled:= False;
+    end;
+  if form1.cbox_interface.ItemIndex = 1 then
+    begin
+      form1.ip_current.Text:= '192.168.000.010';
+      form1.ip_current.Enabled:= True;
+    end;
+end;
+
 procedure TForm1.FormShow(Sender: TObject);
 var WSAData: TWSAData;
     aNetInterfaceList: tNetworkInterfaceList;
@@ -122,6 +146,47 @@ begin
       MessageDlg('#ERROR# '+'Ошибка настроек сетевой карты данного ПК! Не получен IP адрес!', mtError, [mbOK],0);
       Application.Terminate;
     end;
+end;
+
+procedure TForm1.gwaddrChange(Sender: TObject);
+begin
+  if pos(' ',form1.gwaddr.Text)=0 then
+    form1.btn_change.Enabled:= True
+  else
+    form1.btn_change.Enabled:= False;
+end;
+
+procedure TForm1.ip_currentChange(Sender: TObject);
+begin
+  if pos(' ',form1.ip_current.Text)=0 then
+    begin
+      form1.ip_new.Enabled:= True;
+      form1.ip_new.OnChange(Sender);
+    end
+  else
+    form1.ip_new.Enabled:= False;
+end;
+
+procedure TForm1.ip_newChange(Sender: TObject);
+begin
+  if pos(' ',form1.ip_new.Text)=0 then
+    begin
+      form1.netmask.Enabled:= True;
+      form1.netmask.OnChange(Sender);
+    end
+  else
+    form1.netmask.Enabled:= False;
+end;
+
+procedure TForm1.netmaskChange(Sender: TObject);
+begin
+  if pos(' ',form1.netmask.Text)=0 then
+    begin
+      form1.gwaddr.Enabled:= True;
+      form1.gwaddr.OnChange(Sender);
+    end
+  else
+    form1.gwaddr.Enabled:= False;
 end;
 
 end.
