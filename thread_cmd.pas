@@ -19,7 +19,7 @@ implementation
   uses
   Windows, Messages, SysUtils, Variants, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtDlgs, ShellApi, ShlObj, ComCtrls, Mask,
-  ExtCtrls, jpeg, System.UITypes, main, uping;
+  ExtCtrls, jpeg, System.UITypes, main, uping, func_proc;
 
 
 
@@ -48,51 +48,117 @@ begin
 end;
 
 procedure Tthread_cmd.Execute;
-var cmd: string;
+var cmd, kluch: string;
     temp: TStringList;
     i: integer;
+    flag: boolean;
 begin
+  if form1.CheckBox1.Checked then
+    kluch:= '/c '
+  else
+    kluch:= '/c ';
+  form1.btn_change.Enabled:= False;
   form1.logs.Clear;
   form1.logs.Lines.Add('1. Проверка подключения к ПЛК по IP=' + normalip(form1.ip_current.Text) + '...');
   if Ping(ansistring(normalip(form1.ip_current.Text))) then
     begin
       form1.logs.Lines.Add('2. ПЛК отвечает - можно заменить IP адрес.');
       form1.logs.Lines.Add('3. Чтение текущих сетевых настроек ПЛК...');
-      cmd:= '/c echo y | ' + extractfilepath(paramstr(0))+'pscp.exe -pw "" root@' + normalip(form1.ip_current.Text) + ':/etc/' + NETFILE + ' ' + extractfilepath(paramstr(0));
-      ShellExecute(Form1.Handle, 'open', 'cmd.exe', PChar(cmd), nil, SW_NORMAL);
-      while not FileExists(extractfilepath(paramstr(0)) + NETFILE) do
-          sleep(500);
-      sleep(1500);
+      form1.dot_timer.Enabled:= True;
+      cmd:= kluch + 'echo y | "' + extractfilepath(paramstr(0))+'pscp.exe" -pw "" root@' + normalip(form1.ip_current.Text) + ':/etc/' + NETFILE + ' ' + extractfilepath(paramstr(0));
+      if not form1.CheckBox1.Checked then
+        form1.logs.Lines.Add(cmd);
+      temp:=TStringList.Create;
+      flag:= False;
+      if RunCaptured('C:\', 'cmd.exe',cmd,temp) then
+        begin
+          form1.dot_timer.Enabled:= False;
+          for I := 0 to temp.Count-1 do
+            if pos('100%',temp.Strings[i])>0 then
+              begin
+                flag:= True;
+                form1.logs.Lines.Add(temp.Strings[i]);
+              end;
+        end;
+      if not flag then
+        begin
+          MessageDlg('Ошибка в получении файла конфигурации network.conf!', mtError, [mbOK],0);
+          Application.Terminate;
+        end;
+      temp.Free;
       temp:= TStringList.Create;
       temp.LoadFromFile(extractfilepath(paramstr(0)) + NETFILE, TEncoding.UTF8);
+      form1.logs.Lines.Add('');
       form1.logs.Lines.AddStrings(temp);
+      form1.logs.Lines.Add('');
       //D:\Kosenko\network.conf
       form1.logs.Lines.Add('4. Вносим изменения в текущие сетевые настройки ПЛК...');
+      form1.logs.Lines.Add('');
       for I := 0 to temp.Count-1 do
         begin
           if pos('IPADDR="',temp.Strings[i])>0 then
-            temp.Strings[i]:= 'IPADDR="' + normalip(form1.ip_new.Text) + '"';
+            begin
+              temp.Strings[i]:= 'IPADDR="' + normalip(form1.ip_new.Text) + '"';
+              form1.logs.Lines.Add(temp.Strings[i]);
+            end;
           if pos('NETMASK="',temp.Strings[i])>0 then
-            temp.Strings[i]:= 'NETMASK="' + normalip(form1.netmask.Text) + '"';
+            begin
+              temp.Strings[i]:= 'NETMASK="' + normalip(form1.netmask.Text) + '"';
+              form1.logs.Lines.Add(temp.Strings[i]);
+            end;
           if pos('GWADDR="',temp.Strings[i])>0 then
-            temp.Strings[i]:= 'GWADDR="' + normalip(form1.gwaddr.Text) + '"';
+            begin
+              temp.Strings[i]:= 'GWADDR="' + normalip(form1.gwaddr.Text) + '"';
+              form1.logs.Lines.Add(temp.Strings[i]);
+            end;
         end;
-    //  temp.Strings[5]:= 'IPADDR="' + normalip(form1.ip_new.Text) + '"';
-    //  temp.Strings[6]:= 'NETMASK="' + normalip(form1.netmask.Text) + '"';
-    //  temp.Strings[7]:= 'GWADDR="' + normalip(form1.gwaddr.Text) + '"';
-      form1.logs.Lines.AddStrings(temp);
+      form1.logs.Lines.Add('');
       temp.SaveToFile(extractfilepath(paramstr(0)) + NETFILE, TEncoding.UTF8);
       temp.Free;
       form1.logs.Lines.Add('5. Записываем изменения сетевых настроек в ПЛК...');
-      cmd:= '/c ' + extractfilepath(paramstr(0))+'pscp.exe -pw "" ' + extractfilepath(paramstr(0)) + NETFILE + ' root@' + normalip(form1.ip_current.Text) + ':/etc/';
-      ShellExecute(Form1.Handle, 'open', 'cmd.exe', PChar(cmd), nil, SW_NORMAL);
-      sleep(30000);
+      form1.dot_timer.Enabled:= True;
+      cmd:= kluch + 'echo y | "' + extractfilepath(paramstr(0))+'pscp.exe" -pw "" "' + extractfilepath(paramstr(0)) + NETFILE + '" root@' + normalip(form1.ip_current.Text) + ':/etc/';
+      if not form1.CheckBox1.Checked then
+        form1.logs.Lines.Add(cmd);
+      temp:=TStringList.Create;
+      flag:= False;
+      if RunCaptured('C:\', 'cmd.exe',cmd,temp) then
+        begin
+          form1.dot_timer.Enabled:= False;
+          for I := 0 to temp.Count-1 do
+            if pos('100%',temp.Strings[i])>0 then
+              begin
+                flag:= True;
+                form1.logs.Lines.Add(temp.Strings[i]);
+              end;
+        end;
+      if not flag then
+        begin
+          MessageDlg('Ошибка в отправке файла конфигурации network.conf!', mtError, [mbOK],0);
+          Application.Terminate;
+        end;
+      temp.Free;
+      form1.logs.Lines.Add('');
+      form1.logs.Lines.Add('6. Посылаем команду перезагрузки ПЛК...');
+      form1.dot_timer.Enabled:= True;
+      cmd:= kluch + '"' + extractfilepath(paramstr(0))+'plink.exe" -pw "" root@' + normalip(form1.ip_current.Text) + ' /sbin/reboot';
+      if not form1.CheckBox1.Checked then
+        form1.logs.Lines.Add(cmd);
+      temp:=TStringList.Create;
+      if RunCaptured('C:\', 'cmd.exe',cmd,temp) then
+        begin
+          form1.dot_timer.Enabled:= False;
+          form1.logs.Lines.Add('');
+          form1.logs.Lines.Add('7. Адрес ПЛК заменен на ' + form1.ip_new.Text + '. ПЛК перезагружен! Дождитесь его загрузки и проверьте связь! Программу можно закрыть.');
+          form1.btn_change.Enabled:= True;
+        end
+      else
+        begin
+          MessageDlg('Ошибка при перезагрузке ПЛК!', mtError, [mbOK],0);
+          Application.Terminate;
+        end;
+      temp.Free;
       DeleteFile(extractfilepath(paramstr(0)) + NETFILE);
-      cmd:= '/c ' + extractfilepath(paramstr(0))+'plink.exe -pw "" root@' + normalip(form1.ip_current.Text) + ' /sbin/reboot';
-      ShellExecute(Form1.Handle, 'open', 'cmd.exe', PChar(cmd), nil, SW_NORMAL);
-      sleep(15000);
-      form1.logs.Lines.Add('6. ПЛК перезагружен для применения новых настроек!');
-    //  MessageDlg('Перезагрузите ПЛК, чтобы изменения вступили в силу!', mtWarning, [mbOK],0);
     end
   else
     begin

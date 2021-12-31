@@ -5,7 +5,8 @@ uses
   main in 'main.pas' {Form1},
   USock in 'USock.pas',
   UPing in 'UPing.pas',
-  thread_cmd in 'thread_cmd.pas';
+  thread_cmd in 'thread_cmd.pas',
+  func_proc in 'func_proc.pas';
 
 {$R *.res}
 
