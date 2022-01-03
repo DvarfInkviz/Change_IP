@@ -828,7 +828,7 @@ object Form1: TForm1
   object ip_new: TMaskEdit
     Left = 112
     Top = 54
-    Width = 118
+    Width = 120
     Height = 21
     Enabled = False
     EditMask = '!099.099.099.099;1;_'
@@ -840,7 +840,7 @@ object Form1: TForm1
   object netmask: TMaskEdit
     Left = 112
     Top = 81
-    Width = 119
+    Width = 120
     Height = 21
     Enabled = False
     EditMask = '!099.099.099.099;1;_'
@@ -909,16 +909,13 @@ object Form1: TForm1
         Text = 'Version'
         Width = 100
       end>
-    ExplicitLeft = -8
-    ExplicitTop = 387
   end
   object CheckBox1: TCheckBox
-    Left = 462
-    Top = 91
-    Width = 14
+    Left = 238
+    Top = 2
+    Width = 83
     Height = 17
-    Checked = True
-    State = cbChecked
+    Caption = 'Debug'
     TabOrder = 8
     Visible = False
   end

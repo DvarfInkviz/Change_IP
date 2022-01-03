@@ -66,18 +66,18 @@ end;
 procedure TForm1.cbox_interfaceChange(Sender: TObject);
 begin
   if form1.cbox_interface.ItemIndex < 0 then
-    form1.ip_current.Enabled:= False
-  else
-    form1.ip_current.Enabled:= True;
+    form1.ip_current.Enabled:= False;
   if form1.cbox_interface.ItemIndex = 0 then
     begin
       form1.ip_current.Text:= '192.168.100.246';
+      form1.ip_current.Enabled:= True;
+      form1.ip_current.OnChange(Sender);
       form1.ip_current.SetFocus;
     end;
   if form1.cbox_interface.ItemIndex = 1 then
     begin
       form1.ip_current.Text:= '192.168.000.010';
-      form1.ip_current.Enabled:= True;
+      form1.ip_current.Enabled:= False;
       form1.ip_current.OnChange(Sender);
       form1.ip_new.SetFocus;
     end;

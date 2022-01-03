@@ -84,12 +84,12 @@
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_MinorVer>5</VerInfo_MinorVer>
+        <VerInfo_MinorVer>6</VerInfo_MinorVer>
         <VerInfo_Debug>true</VerInfo_Debug>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
         <VerInfo_Locale>1049</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=ТрилайнСистемс;FileDescription=$(MSBuildProjectName);FileVersion=1.5.0.8;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <VerInfo_Build>8</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=ТрилайнСистемс;FileDescription=$(MSBuildProjectName);FileVersion=1.6.0.35;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>35</VerInfo_Build>
         <Icon_MainIcon>Change_ip_Icon.ico</Icon_MainIcon>
         <UWP_DelphiLogo44>Win32\Debug\Change_IP_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>Win32\Debug\Change_IP_150.png</UWP_DelphiLogo150>
