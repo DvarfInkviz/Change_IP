@@ -49,6 +49,7 @@ begin
       if RunCaptured('C:\', 'cmd.exe',cmd,temp) then
         begin
           form1.dot_timer.Enabled:= False;
+          form1.logs.Lines.AddStrings(temp);
           form1.logs.Lines.Add('');
           form1.logs.Lines.Add('Адрес ПЛК заменен на ' + form1.ip_new.Text + '.');
           form1.logs.Lines.Add('ПЛК перезагружен! Дождитесь его загрузки и проверьте связь! Программу можно закрыть.');

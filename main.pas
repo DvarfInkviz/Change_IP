@@ -108,7 +108,7 @@ begin
   form1.StatusBar1.Panels.Items[1].Text:= timetostr(now);
   if WSAStartup($101, WSAData)<>0 then
     begin
-      MessageDlg('#ERROR# '+'Ошибка при инициализации WinSock DLL', mtError, [mbOK],0);
+      MessageDlg('Ошибка при инициализации WinSock DLL', mtError, [mbOK],0);
       Application.Terminate;
     end;
   flag := false;
@@ -118,7 +118,7 @@ begin
         flag := true;
   if not flag then
     begin
-      MessageDlg('#ERROR# '+'Ошибка настроек сетевой карты данного ПК! Не получен IP адрес!', mtError, [mbOK],0);
+      MessageDlg('Ошибка настроек сетевой карты данного ПК! Не получен IP адрес!', mtError, [mbOK],0);
       Application.Terminate;
     end;
 end;

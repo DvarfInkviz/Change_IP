@@ -2,29 +2,35 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Замена адреса ПЛК"
-#define MyAppVersion "1.6"
-#define MyAppPublisher "ТрилайнСистемс"
+#define MyAppVersion "1.6.0"
+#define MyAppPublisher "Triline Systems Ltd."
+#define MyAppURL "https://3lsystems.ru/"
 #define MyAppExeName "Change_ip.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{D1523BA2-2007-4D2E-A80C-EBF0301EF7C7}
+AppId={{2F148153-4D77-49F4-B3C9-E01BBD28D881}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
+AppPublisherURL={#MyAppURL}
+AppSupportURL={#MyAppURL}
+AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
+LicenseFile=D:\Kosenko\Change_IP\Win32\Debug\licence.txt
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-OutputBaseFilename=ChangeIPsetup
+OutputBaseFilename=ChangeSetup
+SetupIconFile=D:\Kosenko\Change_IP\Win32\Debug\ip-settings150.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 
 [Languages]
-Name: "russian"; MessagesFile: "compiler:Default.isl"
+Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked

@@ -88,8 +88,8 @@
         <VerInfo_Debug>true</VerInfo_Debug>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
         <VerInfo_Locale>1049</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=ТрилайнСистемс;FileDescription=$(MSBuildProjectName);FileVersion=1.6.0.35;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <VerInfo_Build>35</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=ТрилайнСистемс;FileDescription=$(MSBuildProjectName);FileVersion=1.6.0.36;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>36</VerInfo_Build>
         <Icon_MainIcon>Change_ip_Icon.ico</Icon_MainIcon>
         <UWP_DelphiLogo44>Win32\Debug\Change_IP_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>Win32\Debug\Change_IP_150.png</UWP_DelphiLogo150>
