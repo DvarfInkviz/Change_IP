@@ -885,7 +885,7 @@ object Form1: TForm1
     Width = 193
     Height = 21
     TabOrder = 6
-    Text = 'Choose the interface:'
+    Text = #1042#1099#1073#1077#1088#1080#1090#1077' '#1089#1077#1090#1077#1074#1086#1081' '#1080#1085#1090#1077#1088#1092#1077#1081#1089':'
     OnChange = cbox_interfaceChange
     Items.Strings = (
       'Ethernet'

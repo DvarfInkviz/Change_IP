@@ -28,7 +28,9 @@ implementation
 
 procedure Tthread_cmd.Execute;
 var cmd, kluch: string;
-    temp: TStringList;
+    SEInfo: TShellExecuteInfo;
+    ExitCode: DWORD;
+    ExecuteFile: string;
 begin
   if form1.CheckBox1.Checked then
     kluch:= '/k '
@@ -42,14 +44,28 @@ begin
       form1.logs.Lines.Add('2. ПЛК отвечает - можно заменить IP адрес.');
       form1.logs.Lines.Add('3. Замена сетевых настроек ПЛК...');
       form1.dot_timer.Enabled:= True;
-      cmd:= kluch + 'echo y | plink.exe -pw "" root@' + normalip(form1.ip_current.Text) + ' sed -i ' + #$0027 + 's/IPADDR=.*/IPADDR="' + normalip(form1.ip_new.Text) + '"/; s/NETMASK=.*/NETMASK="' + normalip(form1.netmask.Text) + '"/; s/GWADDR=.*/GWADDR="' + normalip(form1.gwaddr.Text) + '"/' + #$0027 + ' /etc/network.conf; /sbin/reboot';
+      cmd:= kluch + 'echo y | plink.exe -pw "" root@' + normalip(form1.ip_current.Text) + ' "/bin/sed -i ' + #$0027 + 's/IPADDR=.*/IPADDR="' + normalip(form1.ip_new.Text) + '"/; s/NETMASK=.*/NETMASK="' + normalip(form1.netmask.Text) + '"/; s/GWADDR=.*/GWADDR="' + normalip(form1.gwaddr.Text) + '"/' + #$0027 + ' /etc/network.conf; /sbin/reboot"';
       if form1.CheckBox1.Checked then
         form1.logs.Lines.Add(cmd);
-      temp:=TStringList.Create;
-      if RunCaptured('C:\', 'cmd.exe',cmd,temp) then
+      form1.logs.Lines.Add('');
+      ExecuteFile:='cmd.exe';
+      FillChar(SEInfo, SizeOf(SEInfo), 0) ;
+      SEInfo.cbSize := SizeOf(TShellExecuteInfo) ;
+      with SEInfo do
         begin
+          fMask := SEE_MASK_NOCLOSEPROCESS;
+          Wnd := Application.Handle;
+          lpFile := PChar(ExecuteFile) ;
+          lpParameters := PChar(cmd) ;
+          nShow := SW_HIDE;
+        end;
+      if ShellExecuteEx(@SEInfo) then
+        begin
+          repeat
+            Application.ProcessMessages;
+            GetExitCodeProcess(SEInfo.hProcess, ExitCode) ;
+          until (ExitCode <> STILL_ACTIVE) or Application.Terminated;
           form1.dot_timer.Enabled:= False;
-          form1.logs.Lines.AddStrings(temp);
           form1.logs.Lines.Add('');
           form1.logs.Lines.Add('Адрес ПЛК заменен на ' + form1.ip_new.Text + '.');
           form1.logs.Lines.Add('ПЛК перезагружен! Дождитесь его загрузки и проверьте связь! Программу можно закрыть.');
@@ -60,7 +76,6 @@ begin
           MessageDlg('Ошибка при замене адреса ПЛК!', mtError, [mbOK],0);
           Application.Terminate;
         end;
-      temp.Free;
     end
   else
     begin

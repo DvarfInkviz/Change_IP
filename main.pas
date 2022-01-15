@@ -5,7 +5,7 @@ interface
 uses
   Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, system.UITypes, func_proc,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, ShellApi,
   Vcl.ExtCtrls, IdBaseComponent, IdComponent, Vcl.ComCtrls, WinSock,
   Vcl.CheckLst, Vcl.Mask, Usock, ComObj, thread_cmd, Vcl.Imaging.pngimage;
 
@@ -38,6 +38,7 @@ type
     procedure gwaddrChange(Sender: TObject);
     procedure clk_timerTimer(Sender: TObject);
     procedure dot_timerTimer(Sender: TObject);
+    procedure edit_cmdChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -60,8 +61,6 @@ begin
   Thread_cmd.Priority:=tpNormal;
   Thread_cmd.Suspended:=False;
 end;
-
-
 
 procedure TForm1.cbox_interfaceChange(Sender: TObject);
 begin
@@ -90,10 +89,12 @@ end;
 
 procedure TForm1.dot_timerTimer(Sender: TObject);
 begin
-  if pos('=', form1.logs.Lines[form1.logs.Lines.Count-1])=0 then
-    form1.logs.Lines.Add('=>')
-  else
-    form1.logs.Lines[form1.logs.Lines.Count-1]:='='+form1.logs.Lines[form1.logs.Lines.Count-1];
+  form1.logs.Lines[form1.logs.Lines.Count-1]:=form1.logs.Lines[form1.logs.Lines.Count-1] + '.';
+end;
+
+procedure TForm1.edit_cmdChange(Sender: TObject);
+begin
+//  form1.logs.Lines.Add(copy(form1.edit_cmd.Text,1,2));
 end;
 
 // проверка библиотеки windows и настроек сетевой карты
@@ -126,7 +127,9 @@ end;
 procedure TForm1.gwaddrChange(Sender: TObject);
 begin
   if pos(' ',form1.gwaddr.Text)=0 then
-    form1.btn_change.Enabled:= True
+    begin
+      form1.btn_change.Enabled:= True;
+    end
   else
     form1.btn_change.Enabled:= False;
 end;
