@@ -18,7 +18,7 @@ implementation
 
   uses
   Windows, Messages, SysUtils, Variants, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtDlgs, ShellApi, ShlObj, ComCtrls, Mask,
+  Dialogs, StdCtrls, ExtDlgs, ShellApi, ShlObj, ComCtrls, Mask, WinSock,
   ExtCtrls, jpeg, System.UITypes, main, uping, func_proc;
 
 
@@ -70,6 +70,7 @@ begin
           form1.logs.Lines.Add('Адрес ПЛК заменен на ' + form1.ip_new.Text + '.');
           form1.logs.Lines.Add('ПЛК перезагружен! Дождитесь его загрузки и проверьте связь! Программу можно закрыть.');
           form1.btn_change.Enabled:= True;
+          WSACleanup;
         end
       else
         begin

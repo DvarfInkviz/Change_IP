@@ -88,8 +88,8 @@
         <VerInfo_Debug>true</VerInfo_Debug>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
         <VerInfo_Locale>1049</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=ТрилайнСистемс;FileDescription=$(MSBuildProjectName);FileVersion=1.6.0.53;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <VerInfo_Build>53</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=ТрилайнСистемс;FileDescription=$(MSBuildProjectName);FileVersion=1.6.0.55;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>55</VerInfo_Build>
         <Icon_MainIcon>logo3L_44.ico</Icon_MainIcon>
         <UWP_DelphiLogo44>..\logo3L_44.PNG</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>..\logo3L_150.PNG</UWP_DelphiLogo150>

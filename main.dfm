@@ -605,40 +605,41 @@ object Form1: TForm1
     83FFFFFFE000FFFFC7FFFFFFE000FFFFEFFFFFFFE000FFFFFFFFFFFFE000}
   OldCreateOrder = False
   Scaled = False
+  OnClose = FormClose
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object lbl_new_ip: TLabel
     Left = 40
-    Top = 57
+    Top = 62
     Width = 34
     Height = 13
     Caption = 'New IP'
   end
   object lbl_netmask: TLabel
     Left = 40
-    Top = 84
+    Top = 89
     Width = 46
     Height = 13
     Caption = 'NETMASK'
   end
   object lbl_gwaddr: TLabel
     Left = 40
-    Top = 111
+    Top = 116
     Width = 45
     Height = 13
     Caption = 'GWADDR'
   end
   object lbl_ipcurrent: TLabel
     Left = 40
-    Top = 30
+    Top = 35
     Width = 48
     Height = 13
     Caption = 'IP current'
   end
   object Image1: TImage
     Left = 256
-    Top = 52
+    Top = 57
     Width = 200
     Height = 50
     AutoSize = True
@@ -815,7 +816,7 @@ object Form1: TForm1
   end
   object ip_current: TMaskEdit
     Left = 112
-    Top = 27
+    Top = 32
     Width = 120
     Height = 21
     Enabled = False
@@ -827,7 +828,7 @@ object Form1: TForm1
   end
   object ip_new: TMaskEdit
     Left = 112
-    Top = 54
+    Top = 59
     Width = 120
     Height = 21
     Enabled = False
@@ -839,7 +840,7 @@ object Form1: TForm1
   end
   object netmask: TMaskEdit
     Left = 112
-    Top = 81
+    Top = 86
     Width = 120
     Height = 21
     Enabled = False
@@ -851,7 +852,7 @@ object Form1: TForm1
   end
   object gwaddr: TMaskEdit
     Left = 112
-    Top = 108
+    Top = 113
     Width = 120
     Height = 21
     Enabled = False
@@ -863,7 +864,7 @@ object Form1: TForm1
   end
   object logs: TMemo
     Left = 8
-    Top = 166
+    Top = 171
     Width = 468
     Height = 215
     ScrollBars = ssVertical
@@ -871,7 +872,7 @@ object Form1: TForm1
   end
   object btn_change: TButton
     Left = 40
-    Top = 135
+    Top = 140
     Width = 192
     Height = 25
     Caption = 'Change IP'
@@ -881,7 +882,7 @@ object Form1: TForm1
   end
   object cbox_interface: TComboBox
     Left = 39
-    Top = 0
+    Top = 5
     Width = 193
     Height = 21
     TabOrder = 6
@@ -893,7 +894,7 @@ object Form1: TForm1
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 392
+    Top = 391
     Width = 484
     Height = 19
     Panels = <
@@ -912,7 +913,7 @@ object Form1: TForm1
   end
   object CheckBox1: TCheckBox
     Left = 238
-    Top = 2
+    Top = 0
     Width = 83
     Height = 17
     Caption = 'Debug'

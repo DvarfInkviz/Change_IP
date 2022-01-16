@@ -39,6 +39,7 @@ type
     procedure clk_timerTimer(Sender: TObject);
     procedure dot_timerTimer(Sender: TObject);
     procedure edit_cmdChange(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
   public
@@ -63,7 +64,27 @@ begin
 end;
 
 procedure TForm1.cbox_interfaceChange(Sender: TObject);
+var WSAData: TWSAData;
+    aNetInterfaceList: tNetworkInterfaceList;
+    i: integer;
+    flag: boolean;
 begin
+  form1.logs.Clear;
+  if WSAStartup($101, WSAData)<>0 then
+    begin
+      MessageDlg('Ошибка при инициализации WinSock DLL', mtError, [mbOK],0);
+      Application.Terminate;
+    end;
+  flag := false;
+  if GetNetworkInterfaces(aNetInterfaceList) then
+    for i := 0 to High(aNetInterfaceList) do
+      if aNetInterfaceList[i].AddrIP<>'127.0.0.1' then
+        flag := true;
+  if not flag then
+    begin
+      MessageDlg('Ошибка настроек сетевой карты данного ПК! Не получен IP адрес!', mtError, [mbOK],0);
+      Application.Terminate;
+    end;
   if form1.cbox_interface.ItemIndex < 0 then
     form1.ip_current.Enabled:= False;
   if form1.cbox_interface.ItemIndex = 0 then
@@ -98,30 +119,16 @@ begin
 end;
 
 // проверка библиотеки windows и настроек сетевой карты
+procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  WSACleanup;
+end;
+
 procedure TForm1.FormShow(Sender: TObject);
-var WSAData: TWSAData;
-    aNetInterfaceList: tNetworkInterfaceList;
-    i: integer;
-    flag: boolean;
 begin
   form1.StatusBar1.Panels.Items[0].Text:= form1.StatusBar1.Panels.Items[0].Text + #$00AE;
   form1.StatusBar1.Panels.Items[2].Text:= 'Versioin: ' + GetMyVersion;
   form1.StatusBar1.Panels.Items[1].Text:= timetostr(now);
-  if WSAStartup($101, WSAData)<>0 then
-    begin
-      MessageDlg('Ошибка при инициализации WinSock DLL', mtError, [mbOK],0);
-      Application.Terminate;
-    end;
-  flag := false;
-  if GetNetworkInterfaces(aNetInterfaceList) then
-    for i := 0 to High(aNetInterfaceList) do
-      if aNetInterfaceList[i].AddrIP<>'127.0.0.1' then
-        flag := true;
-  if not flag then
-    begin
-      MessageDlg('Ошибка настроек сетевой карты данного ПК! Не получен IP адрес!', mtError, [mbOK],0);
-      Application.Terminate;
-    end;
 end;
 
 procedure TForm1.gwaddrChange(Sender: TObject);
