@@ -5,11 +5,24 @@ interface
   Windows, Messages, SysUtils, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtDlgs, ShellApi, ShlObj, ComCtrls,ComObj, Classes, Variants;
 
+  procedure DeleteFiles(const FileName: String);
   function normalip(ip:string):string;
   function GetMyVersion:string;
-  Procedure WinExecute(CmdLine: string; Wait: Boolean);
 
 implementation
+
+// процедура удаления файлов
+procedure DeleteFiles(const FileName: String);
+var
+  FileOp: TSHFileOpStruct;
+begin
+  FileOp.Wnd := Application.Handle;
+  FileOp.wFunc := FO_DELETE;
+  FileOp.pFrom := PChar(FileName + #0);
+  FileOp.pTo := nil;
+  FileOp.fFlags := FOF_NOCONFIRMATION;
+  SHFileOperation(FileOp);
+end;
 
 // процедура удаления "лишних" нулей в IP адресе
 function normalip(ip:string):string;
@@ -55,22 +68,5 @@ begin
   except; end;
 end;
 //-------------------------//
-
-// процедура ожидания завершения процесса компиляции //
-Procedure WinExecute(CmdLine: string; Wait: Boolean);
-var StartupInfo: TStartupInfo;
-    ProcessInformation: TProcessInformation;
-begin
-  try
-    FillChar(StartupInfo, SizeOf(StartupInfo), 0);
-    StartupInfo.cb := SizeOf(StartupInfo);
-    if not CreateProcess(nil, PChar(CmdLine), nil, nil, True, 0, nil, nil, StartupInfo, ProcessInformation)
-      then RaiseLastOSError;
-   if Wait then
-    WaitForSingleObject(ProcessInformation.hProcess, INFINITE);
-  except
-  end;
-end;
-//-------------------------------//
 
 end.

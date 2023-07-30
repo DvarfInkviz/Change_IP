@@ -4,10 +4,11 @@ interface
 
 uses
   Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics, system.UITypes, func_proc,
+  System.Classes, Vcl.Graphics, system.UITypes, func_proc, System.Zip,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, ShellApi,
   Vcl.ExtCtrls, IdBaseComponent, IdComponent, Vcl.ComCtrls, WinSock,
-  Vcl.CheckLst, Vcl.Mask, Usock, ComObj, thread_cmd, Vcl.Imaging.pngimage;
+  Vcl.CheckLst, Vcl.Mask, Usock, ComObj, thread_cmd, thread_upgrade,
+  Vcl.Imaging.pngimage;
 
 const NETFILE = 'network.conf';
 
@@ -29,6 +30,11 @@ type
     CheckBox1: TCheckBox;
     dot_timer: TTimer;
     Image1: TImage;
+    btn_zip: TButton;
+    Open: TOpenDialog;
+    btn_upgrade: TButton;
+    caution_time: TLabel;
+    caution_pwr: TLabel;
     procedure FormShow(Sender: TObject);
     procedure btn_changeClick(Sender: TObject);
     procedure cbox_interfaceChange(Sender: TObject);
@@ -40,6 +46,8 @@ type
     procedure dot_timerTimer(Sender: TObject);
     procedure edit_cmdChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btn_zipClick(Sender: TObject);
+    procedure btn_upgradeClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -49,6 +57,8 @@ type
 var
   Form1: TForm1;
   Thread_cmd: Tthread_cmd;            //переменная процесса
+  Thread_upgrade: Tthread_upgrade;            //переменная процесса
+  dir_unzip: string;
 
 implementation
 
@@ -61,6 +71,37 @@ begin
   Thread_cmd.FreeOnTerminate:=true;
   Thread_cmd.Priority:=tpNormal;
   Thread_cmd.Suspended:=False;
+end;
+
+procedure TForm1.btn_upgradeClick(Sender: TObject);
+begin
+  Thread_upgrade := Tthread_upgrade.Create(true);
+  Thread_upgrade.FreeOnTerminate:=true;
+  Thread_upgrade.Priority:=tpNormal;
+  Thread_upgrade.Suspended:=False;
+end;
+
+procedure TForm1.btn_zipClick(Sender: TObject);
+var AZipFile : TZipFile;
+begin
+  open.Filter:='ZIP files|*.zip';
+  open.FileName:='*.zip';
+  if open.Execute then
+    begin
+      form1.logs.Lines.Add('Выбран файл: ' + open.FileName);
+      dir_unzip := ExtractFileDir(open.FileName);
+      AZipFile := TZipFile.Create;
+      AZipFile.Open(open.FileName, zmRead);
+      try
+        AZipFile.ExtractAll(dir_unzip);
+        dir_unzip := dir_unzip + '\';
+        form1.logs.Lines.Add('Прошивка разархивирована!');
+        form1.btn_upgrade.Enabled:= True;
+        AZipFile.Close;
+      finally
+        AZipFile.Free;
+      end;
+    end;
 end;
 
 procedure TForm1.cbox_interfaceChange(Sender: TObject);
@@ -93,6 +134,7 @@ begin
       form1.ip_current.Enabled:= True;
       form1.ip_current.OnChange(Sender);
       form1.ip_current.SetFocus;
+      form1.btn_zip.Enabled:= True;
     end;
   if form1.cbox_interface.ItemIndex = 1 then
     begin
@@ -100,6 +142,7 @@ begin
       form1.ip_current.Enabled:= False;
       form1.ip_current.OnChange(Sender);
       form1.ip_new.SetFocus;
+      form1.btn_zip.Enabled:= True;
     end;
 end;
 
